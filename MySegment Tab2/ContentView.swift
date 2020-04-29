@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView: View { //ContentView: 메인
     var body: some View {
         VStack(spacing: 0) {
             Home()
@@ -8,42 +8,46 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct ContentView_Previews: PreviewProvider { //ContentView로딩
     static var previews: some View {
         ContentView()
     }
 }
 
-struct Home : View {
+struct Home : View { // Home: 모든 구성요소의 집합체
     
     @State var index = 1
-    @State var offset : CGFloat = 0 //yh
-    
+//    @State var offset : CGFloat = UIScreen.main.bounds.width //yh
+//    var width = UIScreen.main.bounds.width //yh
     
     var body: some View {
         VStack(spacing: 0) {
             
-            AppBar(index: self.$index, offset: self.$offset)
+            AppBar(index: self.$index) //offset: self.$offset
             
             GeometryReader {g in
                 HStack(spacing: 0) {
-                    First()
-                        .frame(width: g.frame(in : .global).width)
+                    First() //스크롤뷰
+//                        .frame(width: g.frame(in : .global).width)
                     Scnd()
 //                        .frame(width: g.frame(in : .global).width)
                     Third()
 //                        .frame(width: g.frame(in : .global).width)
                 }
+//                .offset(x: self.offset)
             }
         }
+        .animation(.default)
         .edgesIgnoringSafeArea(.all)
     }
 }
 
-struct AppBar : View {
+struct AppBar : View { //버튼을 담고있는 바
     
     @Binding var index : Int
-    @Binding var offset : CGFloat
+//    @Binding var offset : CGFloat
+//    var width = UIScreen.main.bounds.width
+    
     
     var body: some View {
         VStack(alignment: .leading, content: {
@@ -56,6 +60,7 @@ struct AppBar : View {
             HStack 	{
                 Button (action: {
                     self.index = 1
+//                    self.offset = self.width
                 }) {
                     VStack(spacing: 8) {
                         HStack(spacing: 12) {
@@ -64,14 +69,15 @@ struct AppBar : View {
                             Text("Home")
                                 .foregroundColor(self.index == 1 ? .white : Color.white.opacity(0.6))
                         }
-                    Capsule()
-                        .fill(self.index == 1 ? Color.white : Color.clear)
-                        .frame(height: 4)
+                        Capsule()
+                            .fill(self.index == 1 ? Color.white : Color.clear)
+                            .frame(height: 4)
                     }
                 }
                 
                 Button (action: {
                     self.index = 2
+//                    self.offset = 0
                 }) {
                     VStack(spacing: 8) {
                         HStack(spacing: 12) {
@@ -80,14 +86,15 @@ struct AppBar : View {
                             Text("Search")
                                 .foregroundColor(self.index == 2 ? .white : Color.white.opacity(0.6))
                         }
-                    Capsule()
-                        .fill(self.index == 2 ? Color.white : Color.clear)
-                        .frame(height: 4)
+                        Capsule()
+                            .fill(self.index == 2 ? Color.white : Color.clear)
+                            .frame(height: 4)
                     }
                 }
                 
                 Button (action: {
                     self.index = 3
+//                    self.offset = -self.width
                 }) {
                     VStack(spacing: 8) {
                         HStack(spacing: 12) {
@@ -96,25 +103,25 @@ struct AppBar : View {
                             Text("Account")
                                 .foregroundColor(self.index == 3 ? .white : Color.white.opacity(0.6))
                         }
-                    Capsule()
-                        .fill(self.index == 3 ? Color.white : Color.clear)
-                        .frame(height: 4)
+                        Capsule()
+                            .fill(self.index == 3 ? Color.white : Color.clear)
+                            .frame(height: 4)
                     }
                 }
             }
         })
-        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)! + 15)
+        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)! + 15) //yh
         .padding(.horizontal)
         .padding(.bottom, 10)
         .background(Color.red)
     }
 }
 
-struct First : View {
+struct First : View { //첫번째 뷰
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 0) {
-                ForEach(1...5	, id: \.self) {i in
+                ForEach(1...5   , id: \.self) {i in
                     Image("p\(i)")
                     .resizable()
                     .frame(height: 250)
@@ -128,7 +135,7 @@ struct First : View {
     }
 }
 
-struct Scnd : View {
+struct Scnd : View { //두번째 뷰
     var body: some View {
         GeometryReader {_ in
             VStack {
@@ -139,7 +146,7 @@ struct Scnd : View {
     }
 }
 
-struct Third : View {
+struct Third : View { //세번째 뷰
     var body: some View {
         GeometryReader {_ in
             VStack {
