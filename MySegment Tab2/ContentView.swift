@@ -17,36 +17,77 @@ struct ContentView_Previews: PreviewProvider { //ContentView로딩
 struct Home : View { // Home: 모든 구성요소의 집합체
     
     @State var index = 1
-//    @State var offset : CGFloat = UIScreen.main.bounds.width //yh
-//    var width = UIScreen.main.bounds.width //yh
+    @State var offset : CGFloat = UIScreen.main.bounds.width //yh
+    var width = UIScreen.main.bounds.width //yh
     
     var body: some View {
         VStack(spacing: 0) {
             
-            AppBar(index: self.$index) //offset: self.$offset
+            AppBar(index: $index, offset: $offset) //offset: self.$offset
             
             GeometryReader {g in
                 HStack(spacing: 0) {
                     First() //스크롤뷰
-//                        .frame(width: g.frame(in : .global).width)
+                        .frame(width: g.frame(in : .global).width)
+//                    .offset(y: self.offset)
+
                     Scnd()
-//                        .frame(width: g.frame(in : .global).width)
+                        .frame(width: g.frame(in : .global).width)
+//                    .offset(y: self.offset)
+
                     Third()
-//                        .frame(width: g.frame(in : .global).width)
+                        .frame(width: g.frame(in : .global).width)
+//                    .offset(y: self.offset)
                 }
-//                .offset(x: self.offset)
+                .offset(x: self.offset)
+            .highPriorityGesture(DragGesture()
+            .onEnded({ (value) in
+                
+                if value.translation.width > 50 { // minimun drag...
+                    print("right")
+                    self.changeView(left: false)
+                }
+                if -value.translation.width > 50 {
+                    self.changeView(left: true)
+                }
+            }))
+            
+                
             }
         }
         .animation(.default)
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    func  changeView(left: Bool){
+        if left {
+            if self.index != 3 {
+                self.index += 1
+            }
+        }
+        else {
+            if self.index != 0 {
+                self.index -= 1
+            }
+        }
+        if self.index == 1 {
+            self.offset = self.width
+        }
+        else if self.index == 2 {
+            self.offset = 0
+        }
+        else {
+            self.offset = -self.width
+        }
+        // change the width based on the sisze of the tabs...
     }
 }
 
 struct AppBar : View { //버튼을 담고있는 바
     
     @Binding var index : Int
-//    @Binding var offset : CGFloat
-//    var width = UIScreen.main.bounds.width
+    @Binding var offset : CGFloat
+    var width = UIScreen.main.bounds.width
     
     
     var body: some View {
@@ -60,7 +101,7 @@ struct AppBar : View { //버튼을 담고있는 바
             HStack 	{
                 Button (action: {
                     self.index = 1
-//                    self.offset = self.width
+                    self.offset = self.width
                 }) {
                     VStack(spacing: 8) {
                         HStack(spacing: 12) {
@@ -77,7 +118,7 @@ struct AppBar : View { //버튼을 담고있는 바
                 
                 Button (action: {
                     self.index = 2
-//                    self.offset = 0
+                    self.offset = 0
                 }) {
                     VStack(spacing: 8) {
                         HStack(spacing: 12) {
@@ -94,7 +135,7 @@ struct AppBar : View { //버튼을 담고있는 바
                 
                 Button (action: {
                     self.index = 3
-//                    self.offset = -self.width
+                    self.offset = -self.width
                 }) {
                     VStack(spacing: 8) {
                         HStack(spacing: 12) {
